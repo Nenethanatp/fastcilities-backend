@@ -1,0 +1,5 @@
+npm i sequelize mysql2
+sequelize db:create (to create db by cli, before sync
+sequelize init:config (change password,databasename)
+cd src
+sequelize init:models (to import format for model)
