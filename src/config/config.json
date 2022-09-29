@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "Nenethanatporn21",
-    "database": "fastcilities_db",
+    "database": "fastcilities",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

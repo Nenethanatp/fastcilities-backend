@@ -5,6 +5,9 @@ module.exports = (sequelize, DataTypes) => {
       slotTime: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
     },
     {
@@ -18,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: {
         name: 'bookingId',
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       onDelete: 'RESTRICT',
     });

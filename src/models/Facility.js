@@ -5,35 +5,59 @@ module.exports = (sequelize, DataTypes) => {
       type: {
         type: DataTypes.ENUM('Meeting Room', 'Badminton', 'Basketball'),
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       status: {
         type: DataTypes.ENUM('open', 'close'),
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       capacity: DataTypes.INTEGER,
       durationLimit: {
         type: DataTypes.FLOAT,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       openTime: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       closeTime: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       openingDay: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       location: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
     },
     {
@@ -47,6 +71,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: {
         name: 'facilityId',
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       onDelete: 'RESTRICT',
     });

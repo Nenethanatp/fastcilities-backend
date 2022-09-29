@@ -5,6 +5,9 @@ module.exports = (sequelize, DataTypes) => {
       bookingDate: {
         type: DataTypes.DATEONLY,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       cancelReason: {
         type: DataTypes.STRING,
@@ -22,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: {
         name: 'bookingId',
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       onDelete: 'RESTRICT',
     });
@@ -29,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: {
         name: 'facilityId',
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       onDelete: 'RESTRICT',
     });
@@ -36,15 +45,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: {
         name: 'userId',
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       onDelete: false,
-    });
-    Booking.belongsTo(db.Admin, {
-      foreignKey: {
-        name: 'canceledBy',
-        allowNull: false,
-      },
-      onDelete: 'RESTRICT',
     });
   };
   return Booking;
