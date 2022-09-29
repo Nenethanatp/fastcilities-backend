@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'bookings',
       underscored: true,
       paranoid: true,
-      timestamps: true,
     }
   );
 
@@ -42,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     Booking.belongsTo(db.Admin, {
       foreignKey: {
-        name: 'updatedBy',
+        name: 'canceledBy',
         allowNull: false,
       },
       onDelete: 'RESTRICT',

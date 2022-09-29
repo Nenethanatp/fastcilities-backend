@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     'Facility',
     {
       type: {
-        type: DataTypes.ENUM('room', 'badminton', 'basketball'),
+        type: DataTypes.ENUM('Meeting Room', 'Badminton', 'Basketball'),
         allowNull: false,
       },
       name: {
@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       capacity: DataTypes.INTEGER,
-      durationLimit: { type: DataTypes.FLOAT, allowNull: false },
+      durationLimit: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
       openTime: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -36,7 +39,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: 'facilities',
       underscored: true,
-      timestamps: false,
     }
   );
 

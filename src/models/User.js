@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-        primaryKey: true,
       },
 
       password: {
@@ -40,7 +39,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: 'users',
       underscored: true,
-      timestamps: false,
     }
   );
 

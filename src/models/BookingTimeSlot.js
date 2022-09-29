@@ -2,10 +2,6 @@ module.exports = (sequelize, DataTypes) => {
   const BookingTimeSlot = sequelize.define(
     'BookingTimeSlot',
     {
-      facilityTimeSlotId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       slotTime: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -14,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: 'booking_time_slots',
       underscored: true,
-      timestamps: false,
     }
   );
 
