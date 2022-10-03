@@ -73,7 +73,11 @@ exports.register = async (req, res, next) => {
       faculty,
     });
     const token = genToken({ id: user.id });
-    res.status(201).json({ token });
+    const resData = { ...user };
+    delete resData.password;
+    delete resData.createdAt;
+    delete resData.updatedAt;
+    res.status(201).json({ token, user: resData });
   } catch (err) {
     next(err);
   }
@@ -100,7 +104,7 @@ exports.login = async (req, res, next) => {
     }
 
     const token = genToken({ id: user.id });
-    res.status(200).json({ token, role: user.role });
+    res.status(200).json({ token, user });
   } catch (err) {
     next(err);
   }
