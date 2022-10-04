@@ -61,6 +61,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         defaultValue: 'user',
       },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       tableName: 'users',

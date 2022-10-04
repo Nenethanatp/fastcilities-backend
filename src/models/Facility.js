@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     'Facility',
     {
       type: {
-        type: DataTypes.ENUM('Meeting Room', 'Badminton', 'Basketball'),
+        type: DataTypes.ENUM('room', 'badminton', 'basketball'),
         allowNull: false,
         validate: {
           notEmpty: true,
@@ -58,6 +58,10 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notEmpty: true,
         },
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {
