@@ -22,48 +22,106 @@ exports.createBooking = async (req, res, next) => {
   }
 };
 
-// exports.getMyBooking = async (req, res, next) => {
-//   try {
-//     const myBooking = await Booking.findAll({
-//       attributes: ['bookingDate', 'id'],
-//       include: [
-//         { model: Facility, attributes: ['name', 'location', 'image'] },
-//         { model: BookingTimeSlot, attributes: ['slotTime'] },
-//       ],
-//       where: { userId: req.user.id },
-//     });
+exports.getMyBooking = async (req, res, next) => {
+  try {
+    const myBooking = await Booking.findAll({
+      attributes: ['bookingDate', 'id'],
+      order: [
+        ['bookingDate', 'asc'],
+        [BookingTimeSlot, 'slotTime', 'asc'],
+      ],
+      include: [
+        { model: Facility, attributes: ['name', 'location', 'image'] },
+        {
+          model: BookingTimeSlot,
+          attributes: ['slotTime'],
+        },
+      ],
+      where: { userId: req.user.id },
+    });
 
-// const displayBooking = myBooking.map((booking) => {
-// booking.bookingD
+    if (!myBooking) {
+      throw new AppError('You have no booking', 404);
+    }
+    const myBookingList = [];
+    myBooking.forEach((booking) => {
+      console.log(JSON.parse(JSON.stringify(booking)));
 
-// })
+      const bookingPeriod = [];
+      booking.BookingTimeSlots.reduce((acc, slot, index) => {
+        if (index === 0) {
+          return slot.slotTime;
+        } else {
+          const startTime = slot.slotTime.split('-')[0];
+          const endTime = slot.slotTime.split('-')[1];
+          const startPreviousAcc = acc.split('-')[0];
+          const endPreviousAcc = acc.split('-')[1];
+          if (startTime === endPreviousAcc) {
+            if (index === booking.BookingTimeSlots.length - 1) {
+              bookingPeriod.push(`${startPreviousAcc}-${endTime}`);
+            }
+            return `${startPreviousAcc}-${endTime}`;
+          } else {
+            bookingPeriod.push(acc);
+            console.log(acc);
 
-// const expected =
-// {
-//   bookingDate: "2020-01-01",
-//   id: 11,
-//   Facility: {
-//     name: "Meeting Room 1",
-//     location: "Central Library, Floor 4 ",
-//     image: null
-//   },
-//   BookingTimeSlots: [
-//     {
-//       slotTime: "17:00-17:30"
-//     },
-//     {
-//       slotTime: "17:30-18:00"
-//     }
-//   ],
-//   bookingTime : "17:00-18:00"
-// }
+            return slot.slotTime;
+          }
+        }
+      }, '');
 
-//     res.json({ myBooking });
+      console.log(bookingPeriod);
 
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+      const myBookingNewFormat = {
+        bookingDate: booking.bookingDate,
+        id: booking.id,
+        Facility: booking.Facility,
+        bookingPeriod: bookingPeriod,
+      };
+      myBookingList.push(myBookingNewFormat);
+    });
+    res.json({ myBookingList });
+
+    // res.json({ myBooking });
+
+    // console.log(myBookingList);
+
+    // })
+
+    // const expected =
+    //   {
+    //     "myBookingList": [
+    //         {
+    //             "bookingDate": "2020-01-01",
+    //             "id": 21,
+    //             "Facility": {
+    //                 "name": "Meeting Room 1",
+    //                 "location": "Library at faculty of Engineering, Floor 3",
+    //                 "image": null
+    //             },
+    //             "bookingPeriod": [
+    //                 "13:00-14:30",
+    //                 "19:00-20:00"
+    //             ]
+    //         },
+    //         {
+    //             "bookingDate": "2020-01-01",
+    //             "id": 22,
+    //             "Facility": {
+    //                 "name": "Meeting Room 1",
+    //                 "location": "Central Library, Floor 4 ",
+    //                 "image": null
+    //             },
+    //             "bookingPeriod": [
+    //                 "13:00-14:30"
+    //             ]
+    //         }
+    //     ]
+    // }
+  } catch (err) {
+    next(err);
+  }
+};
 
 exports.deleteMyBooking = async (req, res, next) => {
   try {
