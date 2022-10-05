@@ -29,13 +29,13 @@ exports.getAvailableTime = async (req, res, next) => {
       where: { facilityId: facilityId },
     });
 
-    const usedTimeSlot = [];
+    const usedTimeSlots = [];
     bookings.forEach((booking) => {
       booking.BookingTimeSlots.forEach((timeSlot) => {
-        usedTimeSlot.push(timeSlot.slotTime);
+        usedTimeSlots.push(timeSlot.slotTime);
       });
     });
-    res.status(200).json({ usedTimeSlot });
+    res.status(200).json({ usedTimeSlots });
   } catch (err) {
     next(err);
   }
