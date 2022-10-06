@@ -1,4 +1,3 @@
-const { UploadStream } = require('cloudinary');
 const { Facility, Booking, BookingTimeSlot } = require('../models');
 const AppError = require('../utils/appError');
 
@@ -26,7 +25,7 @@ exports.getAvailableTime = async (req, res, next) => {
     }
     const bookings = await Booking.findAll({
       include: { model: BookingTimeSlot },
-      where: { facilityId: facilityId },
+      where: { facilityId: facilityId, bookingDate: bookingDate },
     });
 
     const usedTimeSlots = [];
@@ -35,7 +34,7 @@ exports.getAvailableTime = async (req, res, next) => {
         usedTimeSlots.push(timeSlot.slotTime);
       });
     });
-    res.status(200).json({ usedTimeSlots });
+    res.status(200).json({ usedTimeSlots, bookingDate });
   } catch (err) {
     next(err);
   }

@@ -31,7 +31,7 @@ exports.getMyBooking = async (req, res, next) => {
         [BookingTimeSlot, 'slotTime', 'asc'],
       ],
       include: [
-        { model: Facility, attributes: ['name', 'location', 'image'] },
+        { model: Facility, attributes: ['id', 'name', 'location', 'image'] },
         {
           model: BookingTimeSlot,
           attributes: ['slotTime'],
@@ -50,6 +50,9 @@ exports.getMyBooking = async (req, res, next) => {
       const bookingPeriod = [];
       booking.BookingTimeSlots.reduce((acc, slot, index) => {
         if (index === 0) {
+          if (booking.BookingTimeSlots.length === 1) {
+            bookingPeriod.push(slot.slotTime);
+          }
           return slot.slotTime;
         } else {
           const startTime = slot.slotTime.split('-')[0];
@@ -62,14 +65,17 @@ exports.getMyBooking = async (req, res, next) => {
             }
             return `${startPreviousAcc}-${endTime}`;
           } else {
+            if (index === booking.BookingTimeSlots.length - 1) {
+              bookingPeriod.push(`${startTime}-${endTime}`);
+            }
             bookingPeriod.push(acc);
-            console.log(acc);
+            // console.log(acc);
 
             return slot.slotTime;
           }
         }
       }, '');
-
+      bookingPeriod.sort();
       console.log(bookingPeriod);
 
       const myBookingNewFormat = {
