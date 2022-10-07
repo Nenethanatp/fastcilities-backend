@@ -2,9 +2,9 @@ const cloudinary = require('../config/cloudinary');
 
 exports.upload = async (path, publicId) => {
   const option = {
-    use_filename: true,
+    use_filename: true, //use original file name (set false will use public id (if have) or random generate)
     overwrite: true,
-    unique_filename: false,
+    unique_filename: false, // false will random char at end of file mean will be unique
   };
 
   if (publicId) {

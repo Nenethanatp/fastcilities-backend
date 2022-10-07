@@ -8,7 +8,8 @@ const upload = require('../middlewares/upload');
 const router = express.Router();
 
 router.get('/', userController.getUser);
-router.patch('/profile', upload.single('image'), userController.updateProfile);
+router.post('/check', userController.checkPassword);
+router.patch('/', upload.single('image'), userController.updateProfile);
 
 router.get('/search', searchController.getAvailableFac);
 router.get('/available_time', searchController.getAvailableTime);

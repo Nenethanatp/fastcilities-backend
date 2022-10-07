@@ -11,10 +11,17 @@ exports.createBooking = async (req, res, next) => {
       bookingDate,
     };
     const { id } = await Booking.create(booking);
+
     const ResBookingTimeSlot = bookingTimeSlot.map((slot) => {
       return { slotTime: slot, bookingId: id };
     });
-    console.log(ResBookingTimeSlot);
+    // console.log(ResBookingTimeSlot);
+
+    // [
+    //   { slotTime: '17:00-17:30', bookingId: 54 },
+    //   { slotTime: '19:00-19:30', bookingId: 54 }
+    // ]
+
     await BookingTimeSlot.bulkCreate(ResBookingTimeSlot);
     res.status(200).json({ message: 'success' });
   } catch (err) {
