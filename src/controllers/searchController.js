@@ -1,5 +1,6 @@
 const { Facility, Booking, BookingTimeSlot } = require('../models');
 const AppError = require('../utils/appError');
+const unavailableSlot = require('../utils/unavailableSlot');
 
 exports.getAvailableFac = async (req, res, next) => {
   try {
@@ -24,16 +25,27 @@ exports.getAvailableTime = async (req, res, next) => {
       new AppError('Require facility id and booking date');
     }
     const bookings = await Booking.findAll({
-      include: { model: BookingTimeSlot },
+      include: { model: BookingTimeSlot, attributes: ['slotTime'] },
       where: { facilityId: facilityId, bookingDate: bookingDate },
     });
 
-    const usedTimeSlots = [];
+    const closeSlot = await Facility.findOne({
+      where: { id: facilityId },
+      attributes: ['openTime', 'closeTime'],
+    });
+
+    const unavailableSlots = unavailableSlot(
+      closeSlot.openTime,
+      closeSlot.closeTime
+    );
+    const usedTimeSlots = [...unavailableSlots];
+
     bookings.forEach((booking) => {
       booking.BookingTimeSlots.forEach((timeSlot) => {
         usedTimeSlots.push(timeSlot.slotTime);
       });
     });
+    usedTimeSlots.sort();
     res.status(200).json({ usedTimeSlots, bookingDate });
   } catch (err) {
     next(err);
