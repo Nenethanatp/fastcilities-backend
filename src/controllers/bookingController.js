@@ -145,7 +145,7 @@ exports.deleteMyBooking = async (req, res, next) => {
     if (!result) {
       throw new AppError('No booking founded', 404);
     }
-    res.status(200).json({ message: 'success' });
+    res.status(200).json({ message: 'Delete successful' });
   } catch (err) {
     next(err);
   }

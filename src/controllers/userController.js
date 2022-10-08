@@ -53,7 +53,10 @@ exports.updateProfile = async (req, res, next) => {
     }
 
     await User.update(updatedUser, { where: { id: req.user.id } });
-    const user = await User.findOne({ where: { id: req.user.id } });
+    const user = await User.findOne({
+      where: { id: req.user.id },
+      attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+    });
 
     res.status(200).json({ user });
   } catch (err) {
