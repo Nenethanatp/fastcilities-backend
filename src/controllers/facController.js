@@ -15,6 +15,17 @@ exports.getAllFac = async (req, res, next) => {
   }
 };
 
+exports.getOneFac = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const facility = await getFacService(Number(id));
+    res.status(200).json({ facility });
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.updateFac = async (req, res, next) => {
   try {
     const file = req.file;
