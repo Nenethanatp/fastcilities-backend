@@ -1,4 +1,5 @@
 const cloudinary = require('../utils/cloudinary');
+const fs = require('fs');
 
 const { Facility } = require('../models');
 const {
@@ -29,12 +30,11 @@ exports.getOneFac = async (req, res, next) => {
 exports.updateFac = async (req, res, next) => {
   try {
     const file = req.file;
-    const facId = req.params.id;
+    const facId = Number(req.params.id);
     const updatedFac = req.body;
 
     const fac = await getFacService(facId);
     let image = fac.image;
-
     if (file) {
       const secureUrl = await cloudinary.upload(
         file.path,
@@ -45,8 +45,8 @@ exports.updateFac = async (req, res, next) => {
 
     await Facility.update(updatedFac, { where: { id: facId } });
 
-    const newUpdateFac = await getFacService(facId);
-    res.status(200).json({ newUpdateFac });
+    const allFacs = await getAllFacService(facId);
+    res.status(200).json({ allFacs });
 
     // if (file){
     //   const secureUrl = await cloudinary.upload(
@@ -56,13 +56,11 @@ exports.updateFac = async (req, res, next) => {
     // }
 
     //  await Facility.update(updateData)
-
-    res.status(200).json({ fac });
   } catch (err) {
     next(err);
   } finally {
-    if (file) {
-      fs.unlinkSync(file.path);
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
     }
   }
 };
