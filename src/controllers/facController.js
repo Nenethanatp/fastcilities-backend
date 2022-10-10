@@ -27,44 +27,6 @@ exports.getOneFac = async (req, res, next) => {
   }
 };
 
-exports.updateFac = async (req, res, next) => {
-  try {
-    const file = req.file;
-    const facId = Number(req.params.id);
-    const updatedFac = req.body;
-
-    const fac = await getFacService(facId);
-    let image = fac.image;
-    if (file) {
-      const secureUrl = await cloudinary.upload(
-        file.path,
-        image ? cloudinary.getPublicId(image) : null
-      );
-      updatedFac.image = secureUrl;
-    }
-
-    await Facility.update(updatedFac, { where: { id: facId } });
-
-    const allFacs = await getAllFacService(facId);
-    res.status(200).json({ allFacs });
-
-    // if (file){
-    //   const secureUrl = await cloudinary.upload(
-    //     file.path,
-    //     image ? cloudinary
-    //   )
-    // }
-
-    //  await Facility.update(updateData)
-  } catch (err) {
-    next(err);
-  } finally {
-    if (req.file) {
-      fs.unlinkSync(req.file.path);
-    }
-  }
-};
-
 exports.createFac = async (req, res, next) => {
   try {
     const facData = req.body;
@@ -85,6 +47,40 @@ exports.createFac = async (req, res, next) => {
   } catch (err) {
     next(err);
   } finally {
-    fs.unlinkSync(file.path);
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
+  }
+};
+
+exports.updateFac = async (req, res, next) => {
+  try {
+    const file = req.file;
+    const facId = Number(req.params.id);
+    const updatedFac = req.body;
+    if (updatedFac.capacity === '0') {
+      updatedFac.capacity = null;
+    }
+    const fac = await getFacService(facId);
+
+    let image = fac.image;
+    if (file) {
+      const secureUrl = await cloudinary.upload(
+        file.path,
+        image ? cloudinary.getPublicId(image) : null
+      );
+      updatedFac.image = secureUrl;
+    }
+
+    await Facility.update(updatedFac, { where: { id: facId } });
+
+    const allFacs = await getAllFacService(facId);
+    res.status(200).json({ allFacs });
+  } catch (err) {
+    next(err);
+  } finally {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
   }
 };
