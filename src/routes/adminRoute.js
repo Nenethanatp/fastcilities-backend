@@ -9,5 +9,5 @@ router.get('/all_facility', facController.getAllFac);
 router.get('/fac/:id', facController.getOneFac);
 router.patch('/fac/:id', upload.single('image'), facController.updateFac);
 router.post('/new_fac', upload.single('image'), facController.createFac);
-module.exports = router;
 router.get('/all_booking', bookingController.getAllBooking);
+module.exports = router;
