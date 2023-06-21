@@ -1,11 +1,10 @@
 {
   "development": {
-    "username": "doadmin",
-    "password": "AVNS_FxHZ6el_RjJLhjr8iDq",
-    "database": "nene_schema",
-    "host": "db-mysql-nene-do-user-12958480-0.b.db.ondigitalocean.com",
-    "dialect": "mysql",
-    "port": "25060"
+    "username": "root",
+    "password": "Nenethanatporn21",
+    "database": "fastcilities",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
   },
   "test": {
     "username": "root",
